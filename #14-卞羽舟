@@ -1,0 +1,42 @@
+## 第一题
+
+#include<stdio.h>
+#define N 100
+#define H 100
+#define X 1000
+int main()
+{
+	int n,i,j,h,x_start,x_end;
+	int hm = 0;
+	int xm = 0;
+	int bridge[H][X]={0};
+	scanf("%d",&n);
+	for(i=0;i<n;i++){
+		scanf("%d %d %d",&h,&x_start,&x_end);
+		if( h > hm ){
+			hm = h;
+		} 
+		if( x_end > xm){
+			xm = x_end;
+		}
+		for(j=0;j<h;j++){
+		  bridge[j][x_start]=1;
+		  bridge[j][x_end]=1;
+		}
+		for(j=x_start;j<=x_end;j++){
+		  bridge[h][j]=1;
+		}
+		
+
+	}
+	int sum = 0;
+	for(i = 0 ;i < xm; i++){ 
+	  for(j = 0; j < hm; j++){
+	    if(bridge[i][j] == 1)
+		sum++;
+	    }
+	} 
+	printf("%d",sum);
+	return 0;
+
+}
