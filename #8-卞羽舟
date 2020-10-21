@@ -1,0 +1,60 @@
+### 爬取牛客网实习信息中在成都的后台岗位
+
+import time
+
+#导入第三方库 发起网络请求
+
+import requests
+
+#导入bs 4库
+from bs4 import BeautifulSoup
+
+#发送http请求 下载
+
+headers = {"User-Ag
+
+url_lianjia = 'https://www.nowcoder.com/job/center?city={}&page={}'
+
+#伪装头
+
+headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                  "Chrome/65.0.3325.181 Safari/537.36"}
+
+#函数定义
+
+def get_job(address, url_lianjia,headers,pageindex):
+
+​    url_lianjia = url_lianjia.format(address, pageindex)
+​    time.sleep(3)
+
+  \#Get该网页从而获取该html内容
+
+​    html = requests.get(url_lianjia, headers=headers)
+
+#创建beautifulsoup对象
+
+​    soup = BeautifulSoup(html.content, 'lxml')
+
+#返回所有匹配到的结果
+
+​    link_li = soup.find_all('li',class_="clearfix")
+
+#遍历数据
+
+​    for li in link_li:
+
+​        job_name = str(li.select('a')[1].string)
+
+#筛选
+
+​        if ("后台" in job_name) or ("Java" in job_name) or ("后端" in job_name):
+​            company_name = str(li.select('div')[3].string)
+​            pay = str(li.select('span')[1].text)
+​            print(company_name, job_name, pay)
+​            data = (company_name, job_name, pay)
+​            putin_db(data)
+
+#爬取10页的数据
+
+for i in range(10):
+    get_job("成都", url_lianjia, headers, i+1)
